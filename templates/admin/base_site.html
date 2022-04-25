@@ -1,0 +1,16 @@
+<!-- Переопределяем html-длкумент админки, подключаем свои css-стили, настраиваем под себя-->
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+<!-- Здесь подключаем свои css-стили-->
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

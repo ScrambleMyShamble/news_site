@@ -1,0 +1,14 @@
+<!-- По документации модули с пользовательскими шаблонами должны храниться по пути название_приложения/templatetags/ -->
+
+<!-- Подгружаем пользвательский тег шаблона, по имени созданного модуля -->
+{% load news_tags %}
+<div class="list-group">
+    <!-- get_categories - функция, создающая тег, в модуле news_tags,  -->
+    {% get_categories as categories %}
+    {% for cat_item in categories %}
+    <!-- get_absolute_url метод модели category, создает путь через функцию reverse, обращаемся к ней для построения ссылки на каждую категорию  -->
+    <a href="{{ cat_item.get_absolute_url }}" class="list-group-item list-group-item-action" >{{ cat_item.title }} <span class="badge badge-primary badge-pill"> {{ cat_item.cnt }} </span></a>
+
+    {% endfor %}
+</div>
+

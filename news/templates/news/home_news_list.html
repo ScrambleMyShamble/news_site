@@ -1,0 +1,49 @@
+<!-- Шаблон для ListView -->
+
+{% extends 'base.html' %}
+
+
+<!-- Список всех существующих категорий из модели Category на панели слева -->
+    <!-- Прописал в base.html -->
+<!-- Конец списка существующих категорий -->
+
+{% block title %}
+    {{ title }} :: {{ block.super }}
+{% endblock %}
+
+<!-- Карточки новостей начало -->
+{% block content %}
+{% for news_item in news %}
+<div class="card mb-3">
+    <div class="card-header">
+        <!-- Категория новости внутри карточки, из модели News -->
+        Категория: <a href="{{ news_item.category.get_absolute_url }}">{{ news_item.category }}</a>
+    </div>
+    <div class="card-body">
+        <div class="media">
+            <!-- Фото -->
+            {% if news_item.photo %}
+            <img src="{{ news_item.photo.url }}" alt="" width="350" class="mr-3">
+            <!-- Если фото нет, подставляем шаблон -->
+            {% else %}
+            <img src="https://previews.123rf.com/images/urfandadashov/urfandadashov1806/urfandadashov180601827/150417827-photo-not-available-vector-icon-isolated-on-transparent-background-photo-not-available-logo-concept.jpg"
+                 width="350" class="mr-3">
+            {% endif %}
+            <div class="media_body">
+                <!-- Заглавие новости -->
+                <h5 class="card-title">{{ news_item.title }}</h5>
+                <!-- Текст новости -->
+                <p class="card-text">{{ news_item.content|safe|linebreaks|truncatewords:50 }}</p>
+                <a href="{{ news_item.get_absolute_url }}" class="btn btn-primary">Read more...</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <!-- Дата создания новости -->
+        {{ news_item.created_at|date:"Y-m-d H:i:s" }}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+<!-- Карточки новостей конец -->

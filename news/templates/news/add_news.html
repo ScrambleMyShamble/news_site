@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+
+<!-- Список всех существующих категорий из модели Category на панели слева -->
+<!-- Конец списка существующих категорий -->
+
+{% block title %} Добавление новости {% endblock %}
+
+
+{% block content %}
+<h1>Добавление новости</h1>
+                        <!-- Далее 3 варианта с помощью которых можно вывести форму -->
+<form action="{% url 'add_news' %}" method="POST">
+    {% csrf_token %}
+
+                    <!-- Вариант №1 вывода формы, виджеты настроены сразу в NewsForm в form.py -->
+    {{ form.as_p }}
+
+                    <!-- Вариант №2 вывода полей формы в ручную, прописывая каждое поле -->
+    {% comment%}
+    <!-- title -->
+    {{ form.non_field.errors }}
+    <div class="from-group">
+    <label for="{{ form.title.id.for_label }}"> Название: </label>
+        {{ form.title }}
+        <div class="invalid-feedback">
+            {{ form.title.errors }}
+        </div>
+    </div>
+    <br>
+    <!-- content -->
+    <div class="from-group">
+    <label for="{{ form.content.id.for_label }}"> Текст: </label>
+        {{ form.content }}
+        <div class="invalid-feedback">
+            {{ form.content.errors }}
+        </div>
+    </div>
+    <!-- is_published -->
+    <div class="from-group">
+    <label for="{{ form.is_published.id.for_label }}"> Опубликовано: </label>
+        {{ form.is_published }}
+        <div class="invalid-feedback">
+            {{ form.is_published.errors }}
+        </div>
+    </div>
+    <br>
+    <!-- category -->
+    <div class="from-group">
+    <label for="{{ form.category.id.for_label }}"> Категория: </label>
+        {{ form.category }}
+        <div class="invalid-feedback">
+            {{ form.category.errors }}
+        </div>
+    </div>
+    <br>
+    {% endcomment %}
+                            <!-- Конец вывода полей в ручную -->
+
+
+
+                            <!-- Вариант №3 вывода полей формы циклом -->
+    {% comment%}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            <div class="invalid-feedback">
+                {{ field.errors }}
+            </div>
+        </div>
+    {% endfor %}
+    {% endcomment %}
+                                <!-- Конец вывода полей формы циклом -->
+
+
+    <button type="submit" class="btn-primary btm-block">Добавить новость</button>
+</form>
+{% endblock %}

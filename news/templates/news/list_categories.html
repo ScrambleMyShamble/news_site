@@ -1,0 +1,15 @@
+    <!-- html-документ рендер, для inclusion_tag функции (news_tags.py/show_categories())  -->
+<div class="list-group">
+    {% for cat_item in categories %}
+    <a href="{% url 'category' cat_item.pk %}" class="list-group-item list-group-item-action">{{ cat_item.title }}</a>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+

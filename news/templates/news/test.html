@@ -1,0 +1,14 @@
+<!-- тестовый html-файл для пагинации через функцию test_paginate-->
+{% extends 'base.html' %}
+
+
+{% block title %} Добавление новости {% endblock %}
+
+
+{% block content %}
+
+    {% for obj in page_obj %}
+        {{ obj }}
+    {% endfor %}
+
+{% endblock %}

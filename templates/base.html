@@ -1,0 +1,108 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <title>{% block title %} Новости base {% endblock %}</title>
+</head>
+<body>
+
+
+<!-- Выносим навигационную панель в отдельный файл, подключаем ее через include-->
+{% include 'inc/_nav.html' %}
+
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- SIDEBAR-->
+            {% include 'inc/_sidebar.html' %}
+        </div>
+        <div class="col-md-9">
+
+        <!-- Блок вывода сообзений при регистрации пользователя-->
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    {% if message.tags == 'error' %}
+
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            {% endif %}
+        <!-- Конец блока сообщений при регистрации пользователя-->
+
+            <!-- CONTENT-->
+            {%block content%} {% endblock %}
+
+            <!-- Начало блока пагинации-->
+            <!-- Проверяем нужна ли вообще пагинация, если все новости уместились на одной странице-->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    <!-- кнопка предыдущей страницы-->
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <!-- встроенный метод в класс pagination previous_page_number-->
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                        </li>
+                        {% endif %}
+                    <!-- конец кнопки предыдущей страницы-->
+
+                    {% for p in page_obj.paginator.page_range %}
+                    <!-- page_obj передаём из view, paginator - встроенный объект в классе paginator у которого есть метод page_range - диапазон существующих листов -->
+                    <!-- подсвечиваем текущую страницу проверкой, если текщая страница совпадает с number - подсвечиваем-->
+                        {% if page_obj.number == p %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                        <!-- в пагинации выводим текущую страницу и -2 и +2 от текущей, остальные в пагинации отображатсья не будут т.е:-->
+                        <!-- 4 5 |6| 7 8, например 6 текущая страница, отображаться будут 2 слева и 2 справа, перейдя на 7 отображание будет 5 6 |7| 8 9-->
+                        {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:+3%}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- кнопка следующей страницы-->
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <!-- встроенный метод в класс pagination next_page_number-->
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        {% endif %}
+                    <!-- конец кнопки следующей страницы-->
+
+                </ul>
+            </nav>
+            {% endif %}
+            <!-- Конец блока пагинации-->
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
